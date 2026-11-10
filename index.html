@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ذكرياتنا الجميلة ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary-color: #ff3366;
+      --secondary-color: #ff6584;
+      --accent-color: #ffd1dc;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      --text-color: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #0b0914;
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Dynamic Slideshow Background */
+    .bg-slideshow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.3;
+      filter: blur(12px) brightness(0.7);
+      transform: scale(1.05);
+      transition: all 1s ease-in-out;
+    }
+
+    .bg-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+
+    .bg-slide.active {
+      opacity: 1;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(11, 9, 20, 0.6) 0%, rgba(11, 9, 20, 0.95) 100%);
+      z-index: -1;
+    }
+
+    /* Floating Hearts Animation */
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart-particle {
+      position: absolute;
+      color: rgba(255, 51, 102, 0.5);
+      font-size: 18px;
+      animation: floatUp 9s linear infinite;
+      bottom: -10%;
+      filter: drop-shadow(0 0 6px rgba(255, 51, 102, 0.8));
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+      }
+      15% { opacity: 0.9; }
+      85% { opacity: 0.9; }
+      100% {
+        transform: translateY(-115vh) rotate(360deg) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    /* Glassmorphic Cards Styling */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: var(--glass-shadow);
+      position: relative;
+    }
+
+    /* Lock Screen Modal */
+    #lockScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      background: rgba(8, 6, 15, 0.96);
+      backdrop-filter: blur(25px);
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #lockScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lock-box {
+      width: 90%;
+      max-width: 420px;
+      padding: 45px 30px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(255, 51, 102, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .lock-icon {
+      font-size: 55px;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      animation: heartPulse 1.8s infinite ease-in-out;
+      filter: drop-shadow(0 0 15px rgba(255, 51, 102, 0.8));
+    }
+
+    @keyframes heartPulse {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.2); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.2); }
+      70% { transform: scale(1); }
+    }
+
+    .lock-title {
+      font-family: 'Reem Kufi', sans-serif;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .lock-desc {
+      font-size: 14px;
+      color: #bbb;
+      margin-bottom: 28px;
+    }
+
+    .password-input-group {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .password-input-group input {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+      transition: all 0.3s ease;
+      letter-spacing: 2px;
+    }
+
+    .password-input-group input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-unlock {
+      width: 100%;
+      padding: 15px;
+      border-radius: 50px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(255, 51, 102, 0.5);
+    }
+
+    .btn-unlock:hover {
+      transform: translateY(-3deg) scale(1.02);
+      box-shadow: 0 12px 30px rgba(255, 51, 102, 0.7);
+    }
+
+    .error-msg {
+      color: #ff4d6d;
+      font-size: 13px;
+      margin-top: 15px;
+      display: none;
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .main-title {
+      font-family: 'Reem Kufi', sans-serif;
+      font-size: 46px;
+      color: #fff;
+      text-shadow: 0 0 25px rgba(255, 51, 102, 0.8);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--accent-color);
+      opacity: 0.9;
+    }
+
+    /* Timer Section */
+    .counter-section {
+      padding: 35px 20px;
+      margin-bottom: 30px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .counter-title {
+      font-size: 21px;
+      margin-bottom: 22px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .timer-grid {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .timer-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 16px 20px;
+      border-radius: 18px;
+      min-width: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 0 15px rgba(255, 51, 102, 0.1);
+    }
+
+    .timer-num {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--secondary-color);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+      text-shadow: 0 0 10px rgba(255, 101, 132, 0.5);
+    }
+
+    .timer-label {
+      font-size: 13px;
+      color: #bbb;
+    }
+
+    /* Love Message Box Styling */
+    .message-section {
+      padding: 35px 30px;
+      margin-bottom: 45px;
+      border: 1px solid rgba(255, 51, 102, 0.35);
+      background: linear-gradient(145deg, rgba(20, 15, 35, 0.85), rgba(11, 9, 20, 0.9));
+      box-shadow: 0 15px 40px rgba(255, 51, 102, 0.15);
+      border-radius: 24px;
+    }
+
+    .message-content {
+      font-size: 16px;
+      line-height: 2.1;
+      color: #f1f1f1;
+      text-align: justify;
+      white-space: pre-line;
+      font-weight: 600;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .card:hover {
+      transform: translateY(-10deg);
+      border-color: var(--primary-color);
+      box-shadow: 0 20px 40px rgba(255, 51, 102, 0.35);
+    }
+
+    .card-img-wrap {
+      width: 100%;
+      height: 320px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+
+    .card:hover .card-img {
+      transform: scale(1.08);
+    }
+
+    .card-footer {
+      padding: 18px 22px;
+      background: rgba(15, 12, 28, 0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .card-date {
+      font-size: 13px;
+      color: var(--secondary-color);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 51, 102, 0.12);
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 51, 102, 0.25);
+    }
+
+    /* Music Player Controls */
+    .music-player {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 22px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .music-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 18px rgba(255, 51, 102, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.12);
+    }
+
+    .music-info {
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .music-title {
+      font-weight: 800;
+      display: block;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 4, 10, 0.95);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+      border-radius: 24px;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .lightbox-img {
+      width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    .lightbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .lightbox-close:hover {
+      background: var(--primary-color);
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 600px) {
+      .main-title { font-size: 34px; }
+      .timer-num { font-size: 26px; }
+      .timer-box { min-width: 75px; padding: 12px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .card-img-wrap { height: 280px; }
+      .message-content { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Audio (تأكد إن اسم الملف music.mp3) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Background Slideshow -->
+  <div class="bg-slideshow" id="bgSlideshow"></div>
+  <div class="overlay"></div>
+
+  <!-- Floating Hearts Particles -->
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <!-- Password Screen Modal -->
+  <div id="lockScreen">
+    <div class="lock-box glass-card">
+      <i class="fa-solid fa-heart lock-icon"></i>
+      <h2 class="lock-title">مرحباً بكِ يا أجمل ذكرياتي ❤️</h2>
+      <p class="lock-desc">ادخلي تاريخ لقائنا الأول للدخول (17/02/2026)</p>
+      
+      <div class="password-input-group">
+        <input type="text" id="passwordInput" placeholder="17/02/2026" autocomplete="off">
+      </div>
+      
+      <button class="btn-unlock" onclick="checkPassword()">فتح الذكريات ✨</button>
+      <div class="error-msg" id="errorMsg">التاريخ غير صحيح، حاولي مرة أخرى ❤️</div>
+    </div>
+  </div>
+
+  <!-- Main Web Content -->
+  <div class="container">
+    
+    <header>
+      <h1 class="main-title">حكايتنا وذكرياتنا الجميلة 💖</h1>
+      <p class="subtitle">كل لحظة معاكي بتسوى الدنيا وما فيها</p>
+    </header>
+
+    <!-- Relationship Counter -->
+    <section class="counter-section glass-card">
+      <h3 class="counter-title">الوقت الذي قضيناه معاً منذ أول يوم 💕</h3>
+      <div class="timer-grid">
+        <div class="timer-box">
+          <span class="timer-num" id="days">0</span>
+          <span class="timer-label">يوم</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="hours">0</span>
+          <span class="timer-label">ساعة</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="minutes">0</span>
+          <span class="timer-label">دقيقة</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="seconds">0</span>
+          <span class="timer-label">ثانية</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deep Love Message Section -->
+    <section class="message-section glass-card">
+      <div class="message-content">
+إلى نن عيني وروحي وملاكي السعيد وملاكي دنيتي..
+
+الرسالة دي موجه لي نور عيني وقلبي وعمري وعمر سنيني فرحتي الي طلعت بيه من الدنيا أنا طول عمري عايش جسد بدون روح ولي من 266 يوم جالي أجمل واحسن ملاك ربنا خلقه وأحسن دنيا وجالي أحسن فرحة دنيتي كأنه جالي مولود بالظبط بس أنا جالي أحسن من كل حاجة حصلت في حياتي وأحسن ذكريات وأنتي معايا.
+
+وبجد وبجد أنا بحبك أوي وبتأسفلك عن أي حاجة حصلت مني ضايقتك أو أي حاجة، بس أنا بحبك حب مفيش من بعده حب أنا بحبك حب الإدمان بكل معني الكلمة. 
+أنا بصحى من نومي وأنا عمري ما كنت بصصحى بدري، لكن بقيت أصحى من نومي بدري عشان أصحيكي، وكمان مش أنا اللي بصحى لا ده أنتِ صوتك في دماغي بيصحيني كده، ده بقالي 30 يوم بصحى على صوتك من دماغي عشان أصحيكي.
+
+وبجد عايز أقولك كلمة واحدة بس أنا بعشقك ومش بعشقك بس أنا بحبك، وعملت الموقع ده وأنا مش قادر أفتح عيني من العياط عشان بجد أنا بحبك أوي ومش عايزك تبعدي عني لو حتى دقيقة يا أحسن إنسانة في حياتي كلها.
+      </div>
+    </section>
+
+    <!-- Outings Grid (12 Cards) -->
+    <main class="gallery-grid" id="galleryGrid"></main>
+
+  </div>
+
+  <!-- Floating Music Player Controls -->
+  <div class="music-player glass-card">
+    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">
+      <i class="fa-solid fa-play" id="musicIcon"></i>
+    </button>
+    <div class="music-info">
+      <span class="music-title">أوعدك ❤️</span>
+      <span style="font-size: 11px; opacity: 0.8;">عايض</span>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal Screen -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content glass-card">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <img src="" alt="preview" class="lightbox-img" id="lightboxImg">
+      <div class="lightbox-header">
+        <h3 class="card-title" id="lightboxTitle" style="color: var(--primary-color); font-size: 24px;"></h3>
+        <div class="card-date" id="lightboxDate"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 12 Direct Image Outings Data
+    const memories = [
+      { title: "الخروجة الأولى", date: "23 مارس 2026", img: "https://i.ibb.co/F4T3Gsh9/photo-6023837017742972759-y-1.jpg" },
+      { title: "الخروجة الثانية", date: "10 أبريل 2026", img: "https://i.ibb.co/d4jt0Q57/photo-6023837017742972767-y-1.jpg" },
+      { title: "الخروجة الثالثة", date: "2 مايو 2026", img: "https://i.ibb.co/wrbVK8tN/photo-6023837017742972750-y-1.jpg" },
+      { title: "الخروجة الرابعة", date: "18 مايو 2026", img: "https://i.ibb.co/MkWHfxyJ/photo-6023837017742972756-y-1.jpg" },
+      { title: "الخروجة الخامسة", date: "5 يونيو 2026", img: "https://i.ibb.co/KxKzTT0r/photo-6023837017742972778-y.jpg" },
+      { title: "الخروجة السادسة", date: "20 يونيو 2026", img: "https://i.ibb.co/QFJhvVxg/photo-6023837017742972776-y.jpg" },
+      { title: "الخروجة السابعة", date: "14 يوليو 2026", img: "https://i.ibb.co/yFkx5rhT/photo-6023837017742972779-y.jpg" },
+      { title: "الخروجة الثامنة", date: "1 أغسطس 2026", img: "https://i.ibb.co/fc7tTDT/photo-6023837017742972780-y.jpg" },
+      { title: "الخروجة التاسعة", date: "12 أكتوبر 2026", img: "https://i.ibb.co/N6wsmKD8/photo-6023837017742972781-y.jpg" },
+      { title: "الخروجة العاشرة", date: "16 أكتوبر 2026", img: "https://i.ibb.co/JRXQP0m2/photo-6023837017742972782-y.jpg" },
+      { title: "الخروجة الحادية عشر", date: "30 أكتوبر 2026", img: "https://i.ibb.co/hFNyr9Dk/photo-6023837017742972783-y.jpg" },
+      { title: "الخروجة الثانية عشر", date: "7 نوفمبر 2026", img: "https://i.ibb.co/ccrNdz1M/photo-6023837017742972784-y.jpg" }
+    ];
+
+    // Audio Logic
+    const audio = document.getElementById('bgMusic');
+    const musicIcon = document.getElementById('musicIcon');
+
+    function playMusic() {
+      audio.play().then(() => {
+        musicIcon.className = 'fa-solid fa-pause';
+      }).catch(err => {
+        console.log("Audio play error:", err);
+      });
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+        musicIcon.className = 'fa-solid fa-pause';
+      } else {
+        audio.pause();
+        musicIcon.className = 'fa-solid fa-play';
+      }
+    }
+
+    // Check Password Function
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      const lockScreen = document.getElementById('lockScreen');
+
+      if (input === '17/02/2026' || input === '17-02-2026' || input === '17022026') {
+        lockScreen.classList.add('hidden');
+        playMusic(); // تفعيل الأغنية فوراً بعد التفاعل والضغط
+        initTimer();
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('passwordInput').style.borderColor = '#ff4d6d';
+      }
+    }
+
+    // Hearts Animation
+    function createHearts() {
+      const container = document.getElementById('heartsContainer');
+      const heartIcons = ['fa-heart', 'fa-heart-pulse'];
+      
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('i');
+        const randomIcon = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+        heart.className = `fa-solid ${randomIcon} heart-particle`;
+        
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 8 + 's';
+        heart.style.animationDuration = (Math.random() * 5 + 7) + 's';
+        heart.style.fontSize = (Math.random() * 16 + 12) + 'px';
+        
+        container.appendChild(heart);
+      }
+    }
+
+    // Dynamic Background Slideshow
+    function setupSlideshow() {
+      const slideshow = document.getElementById('bgSlideshow');
+      memories.forEach((mem, idx) => {
+        const slide = document.createElement('div');
+        slide.className = `bg-slide ${idx === 0 ? 'active' : ''}`;
+        slide.style.backgroundImage = `url('${mem.img}')`;
+        slideshow.appendChild(slide);
+      });
+
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.bg-slide');
+      setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }, 5000);
+    }
+
+    // Render Gallery
+    function renderGallery() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+
+      memories.forEach((mem, index) => {
+        const card = document.createElement('div');
+        card.className = 'card glass-card';
+        card.onclick = () => openLightbox(index);
+
+        card.innerHTML = `
+          <div class="card-img-wrap">
+            <img src="${mem.img}" alt="${mem.title}" class="card-img" loading="lazy">
+          </div>
+          <div class="card-footer">
+            <h3 class="card-title">${mem.title}</h3>
+            <div class="card-date">
+              <i class="fa-regular fa-calendar-days"></i>
+              <span>${mem.date}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Lightbox Controls
+    function openLightbox(index) {
+      const mem = memories[index];
+      document.getElementById('lightboxImg').src = mem.img;
+      document.getElementById('lightboxTitle').innerText = mem.title;
+      document.getElementById('lightboxDate').innerHTML = `<i class="fa-regular fa-calendar-days"></i> ${mem.date}`;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Timer Logic
+    function initTimer() {
+      const startDate = new Date('2026-02-17T00:00:00');
+
+      function updateCounter() {
+        const now = new Date();
+        const diff = now - startDate;
+
+        if (diff < 0) {
+          document.getElementById('days').innerText = "0";
+          document.getElementById('hours').innerText = "0";
+          document.getElementById('minutes').innerText = "0";
+          document.getElementById('seconds').innerText = "0";
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / 1000 / 60) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById('days').innerText = days;
+        document.getElementById('hours').innerText = hours;
+        document.getElementById('minutes').innerText = minutes;
+        document.getElementById('seconds').innerText = seconds;
+      }
+
+      updateCounter();
+      setInterval(updateCounter, 1000);
+    }
+
+    // Enter Key Handler
+    document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+
+    window.onload = () => {
+      createHearts();
+      setupSlideshow();
+      renderGallery();
+    };
+  </script>
+</body>
+</html>
